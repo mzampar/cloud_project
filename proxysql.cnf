@@ -1,0 +1,88 @@
+# proxysql.cnf
+
+# ProxySQL admin credentials
+admin_variables=
+{
+    admin_credentials = "admin:admin;cluster:clusteradminpassword"
+}
+
+# General settings
+mysql_variables=
+{
+    threads = 4
+    max_connections = 2048
+    default_query_delay = 0
+    default_query_timeout = 36000000
+    have_compress = true
+    poll_timeout = 2000
+    interfaces = "0.0.0.0:6032;/tmp/proxysql.sock"
+    default_schema = "information_schema"
+    stacksize = 1048576
+    server_version = "5.5.30"
+    connect_timeout_server = 3000
+    connect_timeout_server_max = 10000
+    monitor_history = 60000
+    monitor_connect_interval = 60000
+    monitor_ping_interval = 5000
+    monitor_read_only_interval = 1500
+    monitor_read_only_timeout = 1000
+}
+
+# MySQL servers
+mysql_servers =
+(
+    {
+        address = "db1"
+        port = 3306
+        hostgroup = 10
+        weight = 100
+        max_connections = 100
+    },
+    {
+        address = "db2"
+        port = 3306
+        hostgroup = 10
+        weight = 100
+        max_connections = 100
+    },
+    # Add more servers as needed
+)
+
+# MySQL users
+mysql_users =
+(
+    {
+        username = "marcoz"
+        password = "Willie75"
+        default_hostgroup = 10
+        max_connections = 100
+        active = 1
+    },
+    # Add more users as needed
+)
+
+# MySQL query rules
+mysql_query_rules =
+(
+    {
+        rule_id = 1
+        active = 1
+        match_pattern = "^SELECT .* FOR UPDATE"
+        destination_hostgroup = 10
+        apply = 1
+    },
+    # Add more query rules as needed
+)
+
+# Monitoring settings
+mysql_variables =
+{
+    monitor_username = "proxysql"
+    monitor_password = "proxysqlpassword"
+    monitor_history = 60000
+    monitor_connect_interval = 60000
+    monitor_ping_interval = 5000
+    monitor_read_only_interval = 1500
+    monitor_read_only_timeout = 1000
+}
+

@@ -1,21 +1,23 @@
 version: '3'
 
 services:
-  nextcloud:
-    image: nextcloud
-    container_name: nextcloud
+
+
+  proxy:
+    image: proxysql/proxysql
+    container_name: proxysql
     restart: always
     ports:
-      - 8080:80
+      - "6033:6033"
+      - "6032:6032"
     environment:
-      - MYSQL_HOST=db
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=marcoz
-      - MYSQL_PASSWORD=Willie75
-      - NEXTCLOUD_ADMIN_USER=marcoz
-      - NEXTCLOUD_ADMIN_PASSWORD=Willie75
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
+      - MYSQL_ROOT_PASSWORD=Willie75
     volumes:
-      - nextcloud:/var/www/html
+      - ./proxysql.cnf:/etc/proxysql.cnf
+    depends_on:
+      - db
 
   db:
     image: mariadb
@@ -29,21 +31,55 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  cloudflared:
-    image: cloudflare/cloudflared
-    container_name: cloudflared
-    restart: always
-    command: tunnel run
-    environment:
-      - TUNNEL_NAME=cloudflared-tunnel
-      - TUNNEL_URL=https://nc-host.ddns.net
-      - TUNNEL_METRICS=0
-      - TUNNEL_TOKEN=mytokengoeshere
-    volumes:
-      - cloudflared:/cloudflared
 
+  nextcloud1:
+    image: nextcloud
+    container_name: nextcloud1
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=marcoz
+      - MYSQL_PASSWORD=Willie75
+      - NEXTCLOUD_ADMIN_USER=marcoz
+      - NEXTCLOUD_ADMIN_PASSWORD=Willie75
+      - REDIS_HOST=redis
+    volumes:
+      - nextcloud:/var/www/html
+
+  nextcloud2:
+    image: nextcloud
+    container_name: nextcloud2
+    restart: always
+    ports:
+      - 8082:80
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=marcoz
+      - MYSQL_PASSWORD=Willie75
+      - NEXTCLOUD_ADMIN_USER=marcoz
+      - NEXTCLOUD_ADMIN_PASSWORD=Willie75
+      - REDIS_HOST=redis
+    volumes:
+      - nextcloud:/var/www/html
+
+  haproxy:
+    image: haproxy
+    container_name: nextcloud_haproxy
+    restart: always
+    ports:
+      - 8088:80
+    volumes:
+    - ./proxysql.cnf:/etc/haproxy.cfg
+
+  redis:
+    image: redis
+    container_name: nextcloud_redis
+    restart: always
 
 volumes:
   nextcloud:
   db:
-  cloudflared:
