@@ -3,22 +3,6 @@ version: '3'
 services:
 
 
-  proxy:
-    image: proxysql/proxysql
-    container_name: proxysql
-    restart: always
-    ports:
-      - "6033:6033"
-      - "6032:6032"
-    environment:
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=admin
-      - MYSQL_ROOT_PASSWORD=Willie75
-    volumes:
-      - ./proxysql.cnf:/etc/proxysql.cnf
-    depends_on:
-      - db
-
   db:
     image: mariadb
     container_name: nextcloud_db
@@ -35,9 +19,10 @@ services:
   nextcloud1:
     image: nextcloud
     container_name: nextcloud1
+    build: .
     restart: always
     ports:
-      - 8081:80
+      - 8080:80
     environment:
       - MYSQL_HOST=db
       - MYSQL_DATABASE=nextcloud
@@ -49,31 +34,6 @@ services:
     volumes:
       - nextcloud:/var/www/html
 
-  nextcloud2:
-    image: nextcloud
-    container_name: nextcloud2
-    restart: always
-    ports:
-      - 8082:80
-    environment:
-      - MYSQL_HOST=db
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=marcoz
-      - MYSQL_PASSWORD=Willie75
-      - NEXTCLOUD_ADMIN_USER=marcoz
-      - NEXTCLOUD_ADMIN_PASSWORD=Willie75
-      - REDIS_HOST=redis
-    volumes:
-      - nextcloud:/var/www/html
-
-  haproxy:
-    image: haproxy
-    container_name: nextcloud_haproxy
-    restart: always
-    ports:
-      - 8088:80
-    volumes:
-    - ./proxysql.cnf:/etc/haproxy.cfg
 
   redis:
     image: redis
