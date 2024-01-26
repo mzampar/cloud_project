@@ -13,7 +13,7 @@ services:
       - my_network
     volumes:
       - ./:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --master -H http://localhost:8080
+    command: -f /mnt/locust/locustfile.py --master -H http://nextcloud:80
 
   worker:
     image: locustio/locust
