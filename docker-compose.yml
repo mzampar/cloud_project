@@ -1,12 +1,17 @@
 version: '3'
 
-services:
+networks:
+  my_network:
+    external: true
 
+services:
 
   db:
     image: mariadb
     container_name: nextcloud_db
     restart: always
+    networks:
+      - my_network
     environment:
       - MYSQL_ROOT_PASSWORD=Willie75
       - MYSQL_PASSWORD=Willie75
@@ -15,11 +20,12 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-
-  nextcloud1:
+  nextcloud:
     image: nextcloud
-    container_name: nextcloud1
+    container_name: nextcloud
     build: .
+    networks:
+      - my_network
     restart: always
     ports:
       - 8080:80
@@ -34,11 +40,12 @@ services:
     volumes:
       - nextcloud:/var/www/html
 
-
   redis:
     image: redis
     container_name: nextcloud_redis
     restart: always
+    networks:
+      - my_network
 
 volumes:
   nextcloud:
