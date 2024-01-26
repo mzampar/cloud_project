@@ -3,23 +3,11 @@ from locust import HttpUser, task, between
 class NextcloudUser(HttpUser):
     wait_time = between(1, 3)
 
-    def on_start(self):
-        # Perform login when a new user starts the scenario
-        self.login()
-
     @task
-    def login(self):
-        # Specify the login credentials
-        login_payload = {
-            "user": "prova1",  # Replace with your Nextcloud username
-            "password": "Willie7594"  # Replace with your Nextcloud password
+    def on_start(self):
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"
         }
-
-        # Make a POST request to the Nextcloud login endpoint
-        response = self.client.post("/login", data=login_payload)
-
-        # Check if the login was successful (you may need to adjust this based on Nextcloud's response)
-        if response.status_code == 200:
-            print("Login successful!")
-        else:
-            print(f"Login failed with status code: {response.status_code}")
+        data = {"username": "prova1", "password": "Willie7594"}
+        self.client.post("/login", headers=headers, json=data)
