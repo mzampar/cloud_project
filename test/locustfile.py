@@ -1,13 +1,50 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, task
+from requests.auth import HTTPBasicAuth
+import requests
 
 class NextcloudUser(HttpUser):
-    wait_time = between(1, 3)
+    auth = None
+
+    def on_start(self):
+        self.user = 'prova1'
+        self.password = 'Willie7594'
+        self.auth = HTTPBasicAuth(self.user, self.password)
+        self.verify_authentication()
+
+    def verify_authentication(self):
+        response = self.client.head("/remote.php/dav", auth=self.auth)
+        if response.status_code != 200:
+            with open("/mnt/locust/output.txt", "a") as f:
+                f.write(f"Authentication failed for user {self.user}.\n")
+            raise Exception(f"Authentication failed for user {self.user}")
+
+
+
+
+    @task(10)
+    def propfind(self):
+        try:
+            response = self.client.request("PROPFIND", "/remote.php/dav", auth=self.auth)
+            response.raise_for_status()  # Raise an HTTPError if response status code is not 2xx
+            with open("/mnt/locust/output.txt", "a") as f:
+                f.write("PROPFIND request successful!\n")
+        except Exception as e:
+            with open("/mnt/locust/output.txt", "a") as f:
+                f.write(f"Error during PROPFIND request: {e}\n")
 
     @task
-    def on_start(self):
-        headers = {
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15"
-        }
-        data = {"username": "prova1", "password": "Willie7594"}
-        self.client.post("/login", headers=headers, json=data)
+    def upload_pdf(self):
+        filename = "Lecture01.pdf"
+        with open('/app/files/' + filename, 'rb') as f:
+            response = self.client.put("/remote.php/dav/files/" + self.user + "/" + filename,
+                                       auth=self.auth, data=f, name="/remote.php/dav/files/[user]/Lecture01.pdf")
+
+        if response.status_code != requests.codes.created:
+            return
+
+        for i in range(0, 5):
+            self.client.get("/remote.php/dav/files/" + self.user + "/" + filename,
+                            auth=self.auth, name="/remote.php/dav/files/[user]/Lecture01.pdf")
+
+        self.client.delete("/remote.php/dav/files/" + self.user + "/" + filename,
+                           auth=self.auth, name="/remote.php/dav/files/[user]/Lecture01.pdf")

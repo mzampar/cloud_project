@@ -1,0 +1,83 @@
+Authentication failed for user user1.
+Authentication failed for user prova1.
+Authentication failed for user prova1.
+Authentication failed for user prova1.
+Authentication failed for user prova1.
+Authentication failed for user prova1.
+Authentication failed for user prova1.
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!
+PROPFIND request successful!

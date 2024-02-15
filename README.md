@@ -135,3 +135,40 @@ Implement monitoring tools (e.g., Prometheus, Grafana) to track system performan
 
 where i found the docker compose for locust
 https://github.com/locustio/locust/blob/master/examples/docker-compose/docker-compose.yml
+
+bettere this:
+https://github.com/MorrisJobke/load-testing/blob/master/locust/locustfile.py
+
+tell how to compile the docker-compose.yml
+
+docker-compose -f docker-compose-nc.yml up -d
+docker-compose -f test/docker-compose-locust.yml up -d
+
+curl -X POST -u ADMIN:PASSWORD -H "OCS-APIRequest: true" http://nextcloud-nfs.local/ocs/v1.php/cloud/users -d userid="user1" -d password="abc123abc\!"
+
+to fix maintanence mode
+docker exec -u www-data nextcloud php occ maintenance:mode --off
+
+docker exec -u www-data nextcloud php occ upgrade
+
+docker exec -u www-data nextcloud php occ twofactorauth:enforce --off
+
+docker exec -u www-data nextcloud php occ twofactor:disable marcoz totp
+
+docker exec -u www-data nextcloud php occ app:update --all
+
+docker exec -u www-data nextcloud php occ app:disable twofactor_totp
+
+docker exec -u 33 nextcloud php occ config:system:set trusted_domains 1 --value=test-master-1
+
+docker exec -it nextcloud cat /var/www/html/config/config.php 
+
+
+created a network,
+connected nextcloud and locust
+
+
+curl -X POST -u marcoz:Willie75 -H "OCS-APIRequest: true" http://localhost:8080/ocs/v1.php/cloud/config -d key="trusted_domains" -d value="['localhost', 'test-master-1']"
+
+
+curl -X POST -u marcoz:Willie75 -H "OCS-APIRequest: true" http://localhost:8080/ocs/v1.php/cloud/users -d userid="user1" -d password="abc123abc\!"
