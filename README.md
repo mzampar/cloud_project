@@ -171,4 +171,28 @@ connected nextcloud and locust
 curl -X POST -u marcoz:Willie75 -H "OCS-APIRequest: true" http://localhost:8080/ocs/v1.php/cloud/config -d key="trusted_domains" -d value="['localhost', 'test-master-1']"
 
 
+
+
 curl -X POST -u marcoz:Willie75 -H "OCS-APIRequest: true" http://localhost:8080/ocs/v1.php/cloud/users -d userid="user1" -d password="abc123abc\!"
+
+
+docker exec -u 33 nextcloud php occ config:system:set trusted_domains 2 --value=nextcloud
+docker exec -u 33 nextcloud php occ config:system:set trusted_domains 3 --value=192.168.65.1
+
+
+to resolve warning bz2
+
+docker-compose exec nextcloud apt-get update && apt-get install -y libbz2-dev && docker-php-ext-install bz2
+docker-compose restart nextcloud
+
+in the shell from docker desktop (exec) section:
+
+apt-get update
+apt-get install -y libbz2-dev
+docker-php-ext-install bz2
+php -m | grep -i bz2 
+
+then restart the container
+
+
+chmod +x CreateUsers.sh
