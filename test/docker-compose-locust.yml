@@ -23,5 +23,6 @@ services:
     volumes:
       - ./:/mnt/locust
       - ./files:/app/files
-    command: -f /mnt/locust/locustfile.py --worker --master-host master 
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
+
 
