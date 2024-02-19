@@ -50,14 +50,6 @@ curl -X DELETE -u USERNAME:PASSWORD "http://localhost:8080/remote.php/dav/files/
 # to turn-off maintanence mode
 docker exec -u www-data nextcloud php occ maintenance:mode --off
 
+# upgrade the Nextcloud instance to the latest version
 docker exec -u www-data nextcloud php occ upgrade
-
-docker exec -u www-data nextcloud php occ twofactorauth:enforce --off
-
-docker exec -u www-data nextcloud php occ twofactor:disable marcoz totp
-
-docker exec -u www-data nextcloud php occ app:update --all
-
-docker exec -u www-data nextcloud php occ app:disable twofactor_totp
-
 ```

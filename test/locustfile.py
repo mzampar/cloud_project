@@ -36,28 +36,6 @@ class NextcloudUser(HttpUser):
             with open("/mnt/locust/output.txt", "a") as f:
                 f.write(f"Error during PROPFIND request: {e} for user {self.user}.\n")
 
-    @task
-    def upload_large(self):
-        filename = "train_mini.csv"
-        with open('/app/files/' + filename, 'rb') as f:
-            response = self.client.put("/remote.php/dav/files/" + self.user + "/" + filename,
-                                       auth=self.auth, data=f, name="/remote.php/dav/files/[user]/train_mini.csv")
-
-        if response.status_code not in (201, 204):
-            with open("/mnt/locust/output.txt", "a") as f:
-                f.write(f"Error during PUT request: {response.status_code} for user {self.user}.\n")
-            return
-
-        
-        self.client.get("/remote.php/dav/files/" + self.user + "/" + filename,
-                        auth=self.auth, name="/remote.php/dav/files/[user]/train_mini.csv")
-
-        self.client.delete("/remote.php/dav/files/" + self.user + "/" + filename,
-                        auth=self.auth, name="/remote.php/dav/files/[user]/train_mini.csv")
-
-
-
-"""
 
     @task
     def upload_small(self):
@@ -77,6 +55,11 @@ class NextcloudUser(HttpUser):
 
         self.client.delete("/remote.php/dav/files/" + self.user + "/" + filename,
                            auth=self.auth, name="/remote.php/dav/files/[user]/into-the-wild.png")
+
+
+"""
+
+
 
     @task
     def upload_medium(self):
@@ -98,5 +81,22 @@ class NextcloudUser(HttpUser):
                         auth=self.auth, name="/remote.php/dav/files/[user]/Lecture01.pdf")
 
 
+    @task
+    def upload_large(self):
+        filename = "train_mini.csv"
+        with open('/app/files/' + filename, 'rb') as f:
+            response = self.client.put("/remote.php/dav/files/" + self.user + "/" + filename,
+                                       auth=self.auth, data=f, name="/remote.php/dav/files/[user]/train_mini.csv")
 
+        if response.status_code not in (201, 204):
+            with open("/mnt/locust/output.txt", "a") as f:
+                f.write(f"Error during PUT request: {response.status_code} for user {self.user}.\n")
+            return
+
+        
+        self.client.get("/remote.php/dav/files/" + self.user + "/" + filename,
+                        auth=self.auth, name="/remote.php/dav/files/[user]/train_mini.csv")
+
+        self.client.delete("/remote.php/dav/files/" + self.user + "/" + filename,
+                        auth=self.auth, name="/remote.php/dav/files/[user]/train_mini.csv")
 """
