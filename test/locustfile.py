@@ -8,7 +8,7 @@ with open("/mnt/locust/output.txt", "a") as f:
 
 class NextcloudUser(HttpUser):
     auth = None
-    users_list = list(range(1, 51))
+    users_list = list(range(1, 41))
 
     def on_start(self):
         random.shuffle(self.users_list)

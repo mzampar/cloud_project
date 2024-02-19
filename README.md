@@ -1,6 +1,6 @@
 The only softare needed to install and run this project is Docker-Desktop.
 
-Since I kept the two containers of Nextcloud and Locust separetaed, the first thing to do is to create a docker network named my_network and the execute the 2 docker-compose files.
+Since I kept the two containers of Nextcloud and Locust separetaed, the first thing to do is to create a docker network named my_network and the execute the 2 docker-compose files from the root folder.
 
 ```bash
 docker network create --driver bridge my_network
