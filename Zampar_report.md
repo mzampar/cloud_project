@@ -1,6 +1,6 @@
 # Cloud Basic Project
 
-This project is based on Docker and two Docker-compose files. I customized the deployed Nextcloud system from the administration settings and with curl requests from terminal: the main configurations I did are user registration, Configure SMTP server for email for password recovery and email notifications, create a group of users, turn-on some security settings.
+This project is based on Docker and two Docker-compose files: one for NextCloud, one for Locust, used to perform the tests. I customized the deployed Nextcloud system from the administration settings and with curl requests from terminal: the main configurations I did are user registration, Configure SMTP server for email for password recovery and email notifications, create a group of users, turn-on some security settings.
 
 
 ## Address Scalability:
@@ -143,9 +143,11 @@ The latter is important because it affects how quickly the load is ramped up dur
 
 
 Where I found the `docker-compose.yml` for locust:
+
 https://github.com/locustio/locust/blob/master/examples/docker-compose/docker-compose.yml
 
 Where I foud the `locustfile.py` -I modified it- to perform the tests:
+
 https://github.com/MorrisJobke/load-testing/blob/master/locust/locustfile.py
 
 Tests were done on my laptop, MacBook Air M2.
@@ -155,14 +157,15 @@ Tests were done on my laptop, MacBook Air M2.
 This test was performed with 1 locust worker, 30 users, spawn rate = 10 for approxiamtely 2 minutes.
 
 
-| Method   | 50%ile (ms) | 60%ile (ms) | 70%ile (ms) | 80%ile (ms) | 90%ile (ms) | 95%ile (ms) | 99%ile (ms) | 100%ile (ms) |
-|----------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|--------------|
-| HEAD     | 15000       | 15000       | 17000       | 19000       | 20000       | 20000       | 21000       | 21000        |
-| PROPFIND | 79          | 93          | 110         | 130         | 160         | 190         | 2000        | 7700         |
-| DELETE   | 410         | 440         | 470         | 520         | 600         | 650         | 800         | 1400         |
-| GET      | 120         | 130         | 150         | 170         | 200         | 230         | 290         | 450          |
-| PUT      | 420         | 450         | 480         | 530         | 610         | 670         | 960         | 7100         |
-| Aggregated | 140       | 170         | 210         | 330         | 450         | 530         | 730         | 21000        |
+| Method   |            | 50%ile (ms) | 60%ile (ms) | 70%ile (ms) | 80%ile (ms) | 90%ile (ms) | 95%ile (ms) | 99%ile (ms) | 100%ile (ms) |
+|----------|------------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|--------------|
+| HEAD     |            | 15000       | 15000       | 17000       | 19000       | 20000       | 20000       | 21000       | 21000        |
+| PROPFIND |            | 79          | 93          | 110         | 130         | 160         | 190         | 2000        | 7700         |
+| DELETE   |            | 410         | 440         | 470         | 520         | 600         | 650         | 800         | 1400         |
+| GET      |            | 120         | 130         | 150         | 170         | 200         | 230         | 290         | 450          |
+| PUT      |            | 420         | 450         | 480         | 530         | 610         | 670         | 960         | 7100         |
+| Aggregated |          | 140       | 170         | 210         | 330         | 450         | 530         | 730         | 21000        |
+
 
 
 We can note that the response time for the login (HEAD request), is quite high, because we are using 30 users, spawning them at a rate of 10users/sec.
@@ -175,14 +178,16 @@ We note that PROPFIND request are the fastest.
 #### Test medium file
 This test was performed with 1 locust worker, 20 users, spawn rate = 5 for approxiamtely 2 minutes.
 
-| Method   | 50%ile (ms) | 60%ile (ms) | 70%ile (ms) | 80%ile (ms) | 90%ile (ms) | 95%ile (ms) | 99%ile (ms) | 100%ile (ms) |
-|----------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|--------------|
-| HEAD     | 4500        | 5200        | 6100        | 11000       | 11000       | 12000       | 12000       | 12000        |
-| PROPFIND | 280         | 300         | 330         | 360         | 420         | 480         | 4500        | 6700         |
-| DELETE   | 360         | 400         | 440         | 480         | 570         | 640         | 760         | 840          |
-| GET      | 310         | 340         | 360         | 400         | 480         | 560         | 690         | 1100         |
-| PUT      | 490         | 540         | 610         | 690         | 790         | 930         | 5500        | 7200         |
-| Aggregated | 330       | 360         | 400         | 460         | 560         | 670         | 1400        | 12000        |
+| Method   |  | 50%ile (ms) | 60%ile (ms) | 70%ile (ms) | 80%ile (ms) | 90%ile (ms) | 95%ile (ms) | 99%ile (ms) | 100%ile (ms) |
+|----------|--------------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|--------------|
+| HEAD     |  | 4500        | 5200        | 6100        | 11000       | 11000       | 12000       | 12000       | 12000        |
+| PROPFIND |  | 280         | 300         | 330         | 360         | 420         | 480         | 4500        | 6700         |
+| DELETE   |  | 360         | 400         | 440         | 480         | 570         | 640         | 760         | 840          |
+| GET      |  | 310         | 340         | 360         | 400         | 480         | 560         | 690         | 1100         |
+| PUT      |  | 490         | 540         | 610         | 690         | 790         | 930         | 5500        | 7200         |
+| Aggregated |  | 330       | 360         | 400         | 460         | 560         | 670         | 1400        | 12000        |
+
+
 
 
 
@@ -196,14 +201,14 @@ Again the PROPFIND request is the fastest, and the GET request is faster than PU
 
 Due to an high CPU usage by locust in uploading a large file during the test, I performed it with only 5 users and a spawn ratio of 1, for approxiamtely 1 minute, after that the Locust Worker Container crushed.
 
-| Method   | 50%ile (ms) | 60%ile (ms) | 70%ile (ms) | 80%ile (ms) | 90%ile (ms) | 95%ile (ms) | 99%ile (ms) | 100%ile (ms) |
-|----------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|--------------|
-| HEAD     | 840         | 1300        | 1300        | 1400        | 1400        | 1400        | 1400        | 1400         |
-| PROPFIND | 1100        | 1100        | 2600        | 2600        | 2700        | 2700        | 2700        | 2700         |
-| DELETE   | 1500        | 1500        | 1500        | 1600        | 1600        | 1600        | 1600        | 1600         |
-| GET      | 8800        | 11000       | 11000       | 11000       | 11000       | 11000       | 11000       | 11000        |
-| PUT      | 21000       | 21000       | 23000       | 23000       | 28000       | 28000       | 28000       | 28000        |
-| Aggregated |           | 2600        | 4500        | 11000       | 11000       | 21000       | 23000       | 28000       | 28000        |
+| Method   |            | 50%ile (ms) | 60%ile (ms) | 70%ile (ms) | 80%ile (ms) | 90%ile (ms) | 95%ile (ms) | 99%ile (ms) | 100%ile (ms) |
+|----------|------------|-------------|-------------|-------------|-------------|-------------|-------------|--------------|--------------|
+| HEAD     |            | 840         | 1300        | 1300        | 1400        | 1400        | 1400        | 1400        | 1400         |
+| PROPFIND |            | 1100        | 1100        | 2600        | 2600        | 2700        | 2700        | 2700        | 2700         |
+| DELETE   |            | 1500        | 1500        | 1500        | 1600        | 1600        | 1600        | 1600        | 1600         |
+| GET      |            | 8800        | 11000       | 11000       | 11000       | 11000       | 11000       | 11000       | 11000        |
+| PUT      |            | 21000       | 21000       | 23000       | 23000       | 28000       | 28000       | 28000       | 28000        |
+| Aggregated |          |    2600        | 4500        | 11000       | 11000       | 21000       | 23000       | 28000       | 28000        |
 
 
 
